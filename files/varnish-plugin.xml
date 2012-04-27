@@ -1,0 +1,57 @@
+<!--
+ -->
+
+<plugin>
+
+  <service name="Varnish Stats">
+
+    <config>
+      <option name="script"
+              description="Collector script"
+              default="/home/hyperic/varnishstat.pl"/>
+    </config>
+
+    <filter name="template"
+            value="exec:file=%script%"/>
+
+    <metric name="Availability"
+            template="${template}:Availability"
+            indicator="true"/>
+
+    <metric name="Connections per Min"
+            category="THROUGHPUT"
+	    indicator="true"
+            template="${template}:client_conn"/>
+
+<metric name="Requests per Min"
+            category="THROUGHPUT"
+            indicator="true"
+            template="${template}:client_req"/>
+
+<metric name="Hits per Min"
+            category="THROUGHPUT"
+            indicator="true"
+            template="${template}:cache_hit"/>
+
+<metric name="Cache Miss per Min"
+            category="THROUGHPUT"
+            indicator="true"
+            template="${template}:cache_miss"/>
+
+<metric name="Backend Conn. per Min"
+            category="THROUGHPUT"
+            indicator="true"
+            template="${template}:backend_conn"/>
+
+<metric name="Bytes per Min"
+            category="THROUGHPUT"
+            indicator="true"
+            alias="TotalkBytes"
+            units="B"
+            collectionType="trendsup"
+            template="${template}:s_bodybytes"/>
+
+
+  </service>
+
+</plugin>

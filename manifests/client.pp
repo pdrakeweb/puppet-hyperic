@@ -36,10 +36,10 @@ class hyperic::client inherits hyperic {
   }
 
   exec { "hyperic-agent-install":
-    path    => "/bin:/usr/bin:/usr/local/bin",
-    cwd     => "/home/hyperic/src",
-    command => "tar -xzf hyperic-hq-agent.tar.gz && chown -R hyperic:admin /home/hyperic/src/hyperic-hq-agent-${hyperic_version}",
-    require => File["/home/hyperic/src/hyperic-hq-agent.tar.gz"],
+    path        => "/bin:/usr/bin:/usr/local/bin",
+    cwd         => "/home/hyperic/src",
+    command     => "tar -xzf hyperic-hq-agent.tar.gz && chown -R hyperic:admin /home/hyperic/src/hyperic-hq-agent-${hyperic_version}",
+    require     => File["/home/hyperic/src/hyperic-hq-agent.tar.gz"],
     refreshonly => true,
   }
   
@@ -55,4 +55,52 @@ class hyperic::client inherits hyperic {
     ensure    => running,
     require   => [ File["/etc/init.d/hyperic-agent"], File["/home/hyperic/src/hyperic-hq-agent-${hyperic_version}/conf/agent.properties"] ],
   }
+}
+
+class hyperic::client::mongodb inherits hyperic::client {
+
+  exec { "hyperic-agent-mongodb":
+    path    => "/bin:/usr/bin:/usr/local/bin",
+    cwd     => "/home/hyperic/src/hyperic-hq-agent-${hyperic_version}/bundles/agent-${hyperic_version}/pdk/plugins",
+    command => "wget --no-check-certificate https://github.com/ClarityServices/hyperic-mongodb/raw/master/mongodb-plugin.xml && chown hyperic:hyperic mongodb-plugin.xml",
+    creates => "/home/hyperic/src/hyperic-hq-agent-${hyperic_version}/bundles/agent-${hyperic_version}/pdk/plugins/mongodb-plugin.xml",
+    notify      => Service["hyperic-agent"],
+  }
+
+}
+
+class hyperic::client::nginx inherits hyperic::client {
+
+  exec { "hyperic-agent-nginx":
+    path    => "/bin:/usr/bin:/usr/local/bin",
+    cwd     => "/home/hyperic/src/hyperic-hq-agent-${hyperic_version}/bundles/agent-${hyperic_version}/pdk/plugins",
+    command => "wget http://nginx-hyperic.googlecode.com/svn/trunk/nginx-plugin.xml && chown hyperic:hyperic nginx-plugin.xml",
+    creates => "/home/hyperic/src/hyperic-hq-agent-${hyperic_version}/bundles/agent-${hyperic_version}/pdk/plugins/nginx-plugin.xml",
+    notify      => Service["hyperic-agent"],
+  }
+
+}
+
+class hyperic::client::varnish inherits hyperic::client {
+
+  package { "libconfig-ini-simple-perl":
+    ensure  => installed,
+  }
+
+  file { "/home/hyperic/src/hyperic-hq-agent-${hyperic_version}/bundles/agent-${hyperic_version}/pdk/plugins/varnish-plugin.xml":
+    owner       => hyperic,
+    group       => hyperic,
+    mode        => 644,
+    source      => "puppet:///modules/hyperic/varnish-plugin.xml",
+    notify      => Service["hyperic-agent"],
+  }
+
+  file { "/home/hyperic/varnishstat.pl":
+    owner       => root,
+    group       => root,
+    mode        => 755,
+    source      => "puppet:///modules/hyperic/varnishstat.pl",
+    require     => Package["libconfig-ini-simple-perl"],
+  }
+
 }
