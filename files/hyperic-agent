@@ -1,6 +1,6 @@
 #! /bin/sh
 ### BEGIN INIT INFO
-# Provides:          hq-agent 
+# Provides:          hyperic-agent 
 # Required-Start:    $network
 # Required-Stop:     $network
 # Default-Start:     3 4 5
@@ -18,7 +18,7 @@
 # PATH should only include /usr/* if it runs after the mountnfs.sh script
 PATH=/usr/sbin:/usr/bin:/sbin:/bin
 DESC="Starts the Hyperic HQ Agent"
-NAME=hq-agent
+NAME=hyperic-agent
 
 # Read configuration variable file if it is present
 [ -r /etc/default/$NAME ] && . /etc/default/$NAME

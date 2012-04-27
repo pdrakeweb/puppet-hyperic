@@ -6,12 +6,11 @@
 #
 # Actions:
 #
-# Requires:
+# Requires: java heira
 #
-# Sample Usage:
+# Sample Usage: include hyperic::client
 #
-# [Remember: No empty lines between comments and class definition]
-class hyperic ($hyperic_version = "4.5") {
+class hyperic ($hyperic_version = "4.5.3") {
 
   include java
 

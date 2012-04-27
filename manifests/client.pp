@@ -2,20 +2,30 @@ class hyperic::client inherits hyperic {
 
   $hyperic_agent_source = "hyperic-hq-agent-${hyperic_version}-${architecture}-${kernel}.tar.gz"
   $hyperic_server_ip = hiera("hyperic_server_ip", "127.0.0.1")
+  $hyperic_hq_user = hiera("hyperic_hq_user", "hqadmin")
+  $hyperic_hq_pass = hiera("hyperic_hq_pass", "hqadmin")
+
+  file { "/home/hyperic/src":
+    owner   => hyperic,
+    group   => admin,
+    mode    => 755,
+    ensure  => directory,
+  }
 
   file { "/home/hyperic/src/hyperic-hq-agent.tar.gz":
-    owner   => root,
-    group   => root,
+    owner   => hyperic,
+    group   => admin,
     mode    => 644,
     source  => "puppet:///modules/hyperic/${hyperic_agent_source}",
-    notify  => 'hyperic-agent-install',
+    notify  => Exec["hyperic-agent-install"],
+    require => File["/home/hyperic/src"],
   }
 
   file { "/etc/init.d/hyperic-agent":
     owner   => root,
     group   => root,
     mode    => 755,
-    source  => "puppet:///modules/hyperic/hq-agent",
+    source  => "puppet:///modules/hyperic/hyperic-agent",
   }
 
   file { "/etc/default/hyperic-agent":
@@ -28,7 +38,7 @@ class hyperic::client inherits hyperic {
   exec { "hyperic-agent-install":
     path    => "/bin:/usr/bin:/usr/local/bin",
     cwd     => "/home/hyperic/src",
-    command => "tar -xzf hyperic-hq-agent.tar.gz",
+    command => "tar -xzf hyperic-hq-agent.tar.gz && chown -R hyperic:admin /home/hyperic/src/hyperic-hq-agent-${hyperic_version}",
     require => File["/home/hyperic/src/hyperic-hq-agent.tar.gz"],
     refreshonly => true,
   }
@@ -43,6 +53,6 @@ class hyperic::client inherits hyperic {
   
   service { "hyperic-agent":
     ensure    => running,
-    require   => File["/etc/init.d/hyperic-agent"],
+    require   => [ File["/etc/init.d/hyperic-agent"], File["/home/hyperic/src/hyperic-hq-agent-${hyperic_version}/conf/agent.properties"] ],
   }
 }

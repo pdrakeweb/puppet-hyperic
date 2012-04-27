@@ -1,3 +1,4 @@
-class hyperic::server {
 
+class hyperic::server {
+  # Coming soon...
 }
