@@ -62,7 +62,7 @@ class hyperic::client::mongodb inherits hyperic::client {
   exec { "hyperic-agent-mongodb":
     path    => "/bin:/usr/bin:/usr/local/bin",
     cwd     => "/home/hyperic/src/hyperic-hq-agent-${hyperic_version}/bundles/agent-${hyperic_version}/pdk/plugins",
-    command => "wget --no-check-certificate https://github.com/ClarityServices/hyperic-mongodb/raw/master/mongodb-plugin.xml && chown hyperic:hyperic mongodb-plugin.xml",
+    command => "wget --no-check-certificate https://raw.github.com/pdrakeweb/hyperic-mongodb/master/mongodb-plugin.xml && chown hyperic:hyperic mongodb-plugin.xml",
     creates => "/home/hyperic/src/hyperic-hq-agent-${hyperic_version}/bundles/agent-${hyperic_version}/pdk/plugins/mongodb-plugin.xml",
     notify      => Service["hyperic-agent"],
   }
