@@ -8,7 +8,7 @@
 #
 # Requires: java heira
 #
-# Sample Usage: include hyperic::client
+# Sample Usage: include hyperic::agent
 #
 class hyperic ($hyperic_version = "4.5.3") {
 

@@ -1,4 +1,4 @@
-class hyperic::client inherits hyperic {
+class hyperic::agent inherits hyperic {
 
   $hyperic_agent_source = "hyperic-hq-agent-${hyperic_version}-${architecture}-${kernel}.tar.gz"
   $hyperic_server_ip = hiera("hyperic_server_ip", "127.0.0.1")
@@ -57,7 +57,7 @@ class hyperic::client inherits hyperic {
   }
 }
 
-class hyperic::client::mongodb inherits hyperic::client {
+class hyperic::agent::mongodb inherits hyperic::client {
 
   exec { "hyperic-agent-mongodb":
     path    => "/bin:/usr/bin:/usr/local/bin",
@@ -69,7 +69,7 @@ class hyperic::client::mongodb inherits hyperic::client {
 
 }
 
-class hyperic::client::nginx inherits hyperic::client {
+class hyperic::agent::nginx inherits hyperic::client {
 
   exec { "hyperic-agent-nginx":
     path    => "/bin:/usr/bin:/usr/local/bin",
@@ -81,7 +81,7 @@ class hyperic::client::nginx inherits hyperic::client {
 
 }
 
-class hyperic::client::varnish inherits hyperic::client {
+class hyperic::agent::varnish inherits hyperic::client {
 
   package { "libconfig-ini-simple-perl":
     ensure  => installed,

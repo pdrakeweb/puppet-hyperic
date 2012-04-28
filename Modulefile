@@ -1,11 +1,10 @@
 name    'puppet-hyperic'
 version '0.0.1'
-source 'UNKNOWN'
-author 'puppet'
-license 'UNKNOWN'
-summary 'UNKNOWN'
-description 'UNKNOWN'
-project_page 'UNKNOWN'
+author 'Peter J. Drake'
+license 'GPL'
+summary 'Install and configure Hyperic HQ agent and server.'
+project_page 'https://github.com/pdrakeweb/puppet-hyperic'
 
 ## Add dependencies, if any:
-# dependency 'username/name', '>= 1.2.0'
+# dependency 'java'
+# dependency 'heira'
