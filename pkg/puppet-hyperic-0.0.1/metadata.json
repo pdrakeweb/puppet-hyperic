@@ -1,0 +1,31 @@
+{
+  "types": [
+
+  ],
+  "license": "GPL",
+  "description": "UNKNOWN",
+  "summary": "Install and configure Hyperic HQ agent and server.",
+  "source": "UNKNOWN",
+  "author": "Peter J. Drake",
+  "project_page": "https://github.com/pdrakeweb/puppet-hyperic",
+  "version": "0.0.1",
+  "name": "puppet-hyperic",
+  "checksums": {
+    "spec/spec_helper.rb": "ca19ec4f451ebc7fdb035b52eae6e909",
+    "files/varnish-plugin.xml": "e16c4d4d8371aeb894743ba112efd36e",
+    "manifests/server.pp": "82897b3c6f49ddf3c023fa21d72d19cc",
+    "manifests/agent.pp": "1f5e75251882a128cd67c412416c6533",
+    "files/varnishstat.pl": "de295d65a9ac723ca005581c8eb75feb",
+    "templates/hyperic-agent.default.erb": "86b075f2fd870eb9a9562090daee7fa3",
+    "README": "a620d6c49bf88300c065941b24dd2ae5",
+    "tests/init.pp": "e32f1709c139d38694bd70c0e94f694b",
+    "templates/agent.properties.erb": "58062f03a7cefc90344c8e705116926c",
+    "files/hyperic-agent": "09704d3df1f61dbb9f8318417110c92c",
+    "spec/spec.opts": "a600ded995d948e393fbe2320ba8e51c",
+    "Modulefile": "ffe1877df5cfbfd67ef79077a03aac38",
+    "manifests/init.pp": "956a04ec85347b12493014fdd83d1470"
+  },
+  "dependencies": [
+
+  ]
+}
