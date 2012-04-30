@@ -10,6 +10,7 @@ class hyperic::agent inherits hyperic {
     group   => admin,
     mode    => 755,
     ensure  => directory,
+    require => User["hyperic"],
   }
 
   file { "/home/hyperic/src/hyperic-hq-agent.tar.gz":
@@ -64,7 +65,7 @@ class hyperic::agent::mongodb inherits hyperic::agent {
     cwd     => "/home/hyperic/src/hyperic-hq-agent-${hyperic_version}/bundles/agent-${hyperic_version}/pdk/plugins",
     command => "wget --no-check-certificate https://raw.github.com/pdrakeweb/hyperic-mongodb/master/mongodb-plugin.xml && chown hyperic:hyperic mongodb-plugin.xml",
     creates => "/home/hyperic/src/hyperic-hq-agent-${hyperic_version}/bundles/agent-${hyperic_version}/pdk/plugins/mongodb-plugin.xml",
-    notify      => Service["hyperic-agent"],
+    notify  => Service["hyperic-agent"],
   }
 
 }
@@ -76,7 +77,7 @@ class hyperic::agent::nginx inherits hyperic::agent {
     cwd     => "/home/hyperic/src/hyperic-hq-agent-${hyperic_version}/bundles/agent-${hyperic_version}/pdk/plugins",
     command => "wget http://nginx-hyperic.googlecode.com/svn/trunk/nginx-plugin.xml && chown hyperic:hyperic nginx-plugin.xml",
     creates => "/home/hyperic/src/hyperic-hq-agent-${hyperic_version}/bundles/agent-${hyperic_version}/pdk/plugins/nginx-plugin.xml",
-    notify      => Service["hyperic-agent"],
+    notify  => Service["hyperic-agent"],
   }
 
 }
