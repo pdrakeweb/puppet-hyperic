@@ -57,7 +57,7 @@ class hyperic::agent inherits hyperic {
   }
 }
 
-class hyperic::agent::mongodb inherits hyperic::client {
+class hyperic::agent::mongodb inherits hyperic::agent {
 
   exec { "hyperic-agent-mongodb":
     path    => "/bin:/usr/bin:/usr/local/bin",
@@ -69,7 +69,7 @@ class hyperic::agent::mongodb inherits hyperic::client {
 
 }
 
-class hyperic::agent::nginx inherits hyperic::client {
+class hyperic::agent::nginx inherits hyperic::agent {
 
   exec { "hyperic-agent-nginx":
     path    => "/bin:/usr/bin:/usr/local/bin",
@@ -81,7 +81,7 @@ class hyperic::agent::nginx inherits hyperic::client {
 
 }
 
-class hyperic::agent::varnish inherits hyperic::client {
+class hyperic::agent::varnish inherits hyperic::agent {
 
   package { "libconfig-ini-simple-perl":
     ensure  => installed,
