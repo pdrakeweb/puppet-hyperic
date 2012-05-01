@@ -1,0 +1,24 @@
+<plugin>
+
+	<server name="Puppet Agent 2.x">
+
+		<config>
+			<option name="process.query" description="Process Query"
+				default="Pid.PidFile.eq=/var/run/puppet/agent.pid" />
+		</config>
+
+		<property name="HAS_BUILTIN_SERVICES" value="false" />
+		<property name="PROC_QUERY" value="Pid.PidFile.eq=/var/run/puppet/agent.pid" />
+		<plugin type="autoinventory" class="org.hyperic.hq.product.DaemonDetector" />
+
+		<metric name="Availability" alias="Availability"
+			template="sigar:Type=ProcState,Arg=%process.query%:State" category="AVAILABILITY"
+			indicator="true" />
+
+	</server>
+
+	<!-- ==================== Plugin Help =========================== -->
+	<help name="Puppet Agent 2.x">
+		Puppet Agent 2.x Plugin
+	</help>
+</plugin>
