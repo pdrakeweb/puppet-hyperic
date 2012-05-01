@@ -1,57 +1,58 @@
-<!--
- -->
-
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plugin [
+  <!ENTITY process-metrics SYSTEM "/pdk/plugins/process-metrics.xml">
+]>
 <plugin>
 
-  <service name="Varnish Stats">
+	<server name="Varnish">
 
-    <config>
-      <option name="script"
-              description="Collector script"
-              default="/home/hyperic/varnishstat.pl"/>
-    </config>
+		<config>
+			<option name="script" description="Collector script"
+				default="/home/hyperic/varnishstat.pl" />
+			<option name="process.query" description="Process Query"
+				default="Pid.PidFile.eq=/var/run/varnishd.pid" />
+		</config>
 
-    <filter name="template"
-            value="exec:file=%script%"/>
+		<property name="HAS_BUILTIN_SERVICES" value="true" />
+		<property name="PROC_QUERY" value="Pid.PidFile.eq=/var/run/varnishd.pid" />
+		<property name="DEFAULT_CONFIG_FILE" value="/etc/default/varnish" />
+		<property name="DEFAULT_LOG_FILE" value="/var/log/varnish/varnish.log" />
+		<property name="DEFAULT_LOG_LEVEL" value="Error" />
+		<property name="DEFAULT_PID_FILE" value="/var/run/varnishd.pid" />
 
-    <metric name="Availability"
-            template="${template}:Availability"
-            indicator="true"/>
+		<plugin type="autoinventory" class="org.hyperic.hq.product.DaemonDetector" />
+		<plugin type="measurement" class="org.hyperic.hq.product.MeasurementPlugin" />
+		<plugin type="config_track" class="org.hyperic.hq.product.ConfigFileTrackPlugin" />
+		<plugin type="log_track" class="org.hyperic.hq.product.LogFileTailPlugin" />
 
-    <metric name="Connections per Min"
-            category="THROUGHPUT"
-	    indicator="true"
-            template="${template}:client_conn"/>
+		<filter name="template" value="exec:file=%script%" />
 
-<metric name="Requests per Min"
-            category="THROUGHPUT"
-            indicator="true"
-            template="${template}:client_req"/>
+		<metric name="Availability" template="${template}:Availability"
+			indicator="true" />
 
-<metric name="Hits per Min"
-            category="THROUGHPUT"
-            indicator="true"
-            template="${template}:cache_hit"/>
+		<metric name="Connections per Min" category="THROUGHPUT"
+			indicator="true" template="${template}:client_conn" />
 
-<metric name="Cache Miss per Min"
-            category="THROUGHPUT"
-            indicator="true"
-            template="${template}:cache_miss"/>
+		<metric name="Requests per Min" category="THROUGHPUT"
+			indicator="true" template="${template}:client_req" />
 
-<metric name="Backend Conn. per Min"
-            category="THROUGHPUT"
-            indicator="true"
-            template="${template}:backend_conn"/>
+		<metric name="Hits per Min" category="THROUGHPUT" indicator="true"
+			template="${template}:cache_hit" />
 
-<metric name="Bytes per Min"
-            category="THROUGHPUT"
-            indicator="true"
-            alias="TotalkBytes"
-            units="B"
-            collectionType="trendsup"
-            template="${template}:s_bodybytes"/>
+		<metric name="Cache Miss per Min" category="THROUGHPUT"
+			indicator="true" template="${template}:cache_miss" />
 
+		<metric name="Backend Conn. per Min" category="THROUGHPUT"
+			indicator="true" template="${template}:backend_conn" />
 
-  </service>
+		<metric name="Bytes per Min" category="THROUGHPUT" indicator="true"
+			alias="TotalkBytes" units="B" collectionType="trendsup"
+			template="${template}:s_bodybytes" />
 
+	</server>
+
+	<!-- ==================== Plugin Help =========================== -->
+	<help name="Varnish">
+		Varnish Plugin
+	</help>
 </plugin>
