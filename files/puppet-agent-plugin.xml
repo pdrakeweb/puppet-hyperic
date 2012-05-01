@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plugin [
+  <!ENTITY process-metrics SYSTEM "/pdk/plugins/process-metrics.xml">
+]>
+<plugin>
+
+	<server name="Puppet Agent" version="2.x">
+
+		<config>
+			<option name="process.query" description="Process Query"
+				default="Pid.PidFile.eq=/var/run/puppet/agent.pid" />
+		</config>
+
+		<property name="HAS_BUILTIN_SERVICES" value="true" />
+		<property name="PROC_QUERY" value="Pid.PidFile.eq=/var/run/puppet/agent.pid" />
+		<property name="DEFAULT_CONFIG_FILE" value="/etc/puppet/puppet.conf" />
+		<property name="DEFAULT_LOG_FILE" value="/var/log/syslog.log" />
+		<property name="DEFAULT_LOG_LEVEL" value="Error" />
+		<property name="DEFAULT_LOG_INCLUDE" value="puppet-agent" />
+		<property name="DEFAULT_PID_FILE" value="/var/run/puppet/agent.pid" />
+
+		<plugin type="autoinventory" class="org.hyperic.hq.product.DaemonDetector" />
+		<plugin type="measurement" class="org.hyperic.hq.product.MeasurementPlugin" />
+		<plugin type="config_track" class="org.hyperic.hq.product.ConfigFileTrackPlugin" />
+		<plugin type="log_track" class="org.hyperic.hq.product.LogFileTailPlugin" />
+
+		<metric name="Availability" alias="Availability"
+			template="sigar:Type=ProcState,Arg=%process.query%:State" category="AVAILABILITY"
+			indicator="true" />
+
+	</server>
+
+	<!-- ==================== Plugin Help =========================== -->
+	<help name="Puppet Agent">
+		Puppet Agent 2.x Plugin
+	</help>
+</plugin>
