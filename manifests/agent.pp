@@ -54,7 +54,6 @@ class hyperic::agent inherits hyperic {
   
   service { "hyperic-agent":
     ensure    => running,
-    hasstatus => false,
     require   => [ File["/etc/init.d/hyperic-agent"], File["/home/hyperic/src/hyperic-hq-agent-${hyperic_version}/conf/agent.properties"] ],
   }
 }
@@ -67,7 +66,7 @@ class hyperic::agent::mongodb inherits hyperic::agent {
     command => "wget --no-check-certificate https://raw.github.com/pdrakeweb/hyperic-mongodb/master/mongodb-plugin.xml && chown hyperic:hyperic mongodb-plugin.xml",
     creates => "/home/hyperic/src/hyperic-hq-agent-${hyperic_version}/bundles/agent-${hyperic_version}/pdk/plugins/mongodb-plugin.xml",
     notify  => Service["hyperic-agent"],
-    require => Service["mongodb"],
+    require => [ Service["mongodb"], Exec["hyperic-agent-install"] ],
   }
 
 }
@@ -80,7 +79,7 @@ class hyperic::agent::nginx inherits hyperic::agent {
     command => "wget http://nginx-hyperic.googlecode.com/svn/trunk/nginx-plugin.xml && chown hyperic:hyperic nginx-plugin.xml",
     creates => "/home/hyperic/src/hyperic-hq-agent-${hyperic_version}/bundles/agent-${hyperic_version}/pdk/plugins/nginx-plugin.xml",
     notify  => Service["hyperic-agent"],
-    require => Service["nginx"],
+    require => [ Service["nginx"], Exec["hyperic-agent-install"] ],
   }
 
 }
@@ -97,7 +96,7 @@ class hyperic::agent::varnish inherits hyperic::agent {
     mode        => 644,
     source      => "puppet:///modules/hyperic/varnish-plugin.xml",
     notify      => Service["hyperic-agent"],
-    require     => Service["varnish"],
+    require     => [ Service["varnish"], Exec["hyperic-agent-install"] ],
   }
 
   file { "/home/hyperic/varnishstat.pl":
@@ -118,7 +117,7 @@ class hyperic::agent::puppet-agent inherits hyperic::agent {
     mode        => 644,
     source      => "puppet:///modules/hyperic/puppet-agent-plugin.xml",
     notify      => Service["hyperic-agent"],
-    require     => Service["puppet"],
+    require     => [ Service["puppet"], Exec["hyperic-agent-install"] ],
   }
 
 }
