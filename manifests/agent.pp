@@ -54,7 +54,6 @@ class hyperic::agent inherits hyperic {
   
   service { "hyperic-agent":
     ensure    => running,
-    hasstatus => false,
     require   => [ File["/etc/init.d/hyperic-agent"], File["/home/hyperic/src/hyperic-hq-agent-${hyperic_version}/conf/agent.properties"] ],
   }
 }
