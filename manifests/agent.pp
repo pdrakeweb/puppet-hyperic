@@ -1,6 +1,6 @@
 class hyperic::agent inherits hyperic {
 
-  $hyperic_agent_source = "hyperic-hq-agent-${hyperic_version}-${architecture}-${kernel}.tar.gz"
+  $hyperic_agent_source = hiera("hyperic_agent_source", "http://sourceforge.net/projects/hyperic-hq/files/Hyperic%204.5.3/Hyperic%204.5.3-GA/hyperic-hq-agent-4.5.3-x86-64-linux.tar.gz/download")
   $hyperic_server_ip = hiera("hyperic_server_ip", "127.0.0.1")
   $hyperic_hq_user = hiera("hyperic_hq_user", "hqadmin")
   $hyperic_hq_pass = hiera("hyperic_hq_pass", "hqadmin")
@@ -13,11 +13,11 @@ class hyperic::agent inherits hyperic {
     require => User["hyperic"],
   }
 
-  file { "/home/hyperic/src/hyperic-hq-agent.tar.gz":
-    owner   => hyperic,
-    group   => admin,
-    mode    => 644,
-    source  => "puppet:///modules/hyperic/${hyperic_agent_source}",
+  exec { "download-hyperic-agent":
+    path        => "/bin:/usr/bin:/usr/local/bin",
+    cwd         => "/home/hyperic/src",
+    command     => "wget ${hyperic_agent_source} -O hyperic-hq-agent-${hyperic_version}.tar.gz",
+    creates => "/home/hyperic/src/hyperic-hq-agent-${hyperic_version}.tar.gz",
     notify  => Exec["hyperic-agent-install"],
     require => File["/home/hyperic/src"],
   }
@@ -39,8 +39,8 @@ class hyperic::agent inherits hyperic {
   exec { "hyperic-agent-install":
     path        => "/bin:/usr/bin:/usr/local/bin",
     cwd         => "/home/hyperic/src",
-    command     => "tar -xzf hyperic-hq-agent.tar.gz && chown -R hyperic:admin /home/hyperic/src/hyperic-hq-agent-${hyperic_version}",
-    require     => File["/home/hyperic/src/hyperic-hq-agent.tar.gz"],
+    command     => "tar -xzf hyperic-hq-agent-${hyperic_version}.tar.gz && chown -R hyperic:admin /home/hyperic/src/hyperic-hq-agent-${hyperic_version}",
+    require     => Exec["download-hyperic-agent"],
     refreshonly => true,
   }
   
@@ -54,6 +54,7 @@ class hyperic::agent inherits hyperic {
   
   service { "hyperic-agent":
     ensure    => running,
+    hasstatus => false,
     require   => [ File["/etc/init.d/hyperic-agent"], File["/home/hyperic/src/hyperic-hq-agent-${hyperic_version}/conf/agent.properties"] ],
   }
 }
