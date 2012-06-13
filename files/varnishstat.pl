@@ -1,5 +1,5 @@
 #!/usr/bin/perl -w
-use Config::INI::Simple;
+use Config::Simple;
 use POSIX;
 
 # Database File
@@ -49,7 +49,7 @@ sub get_stat{
 
 sub getSavedStats {
 	my %savedStats;
-	my $conf = new Config::INI::Simple;
+	my $conf = new Config::Simple;
 	$conf->read($dbfile);
 	while(my($k, $v) = each(%{$conf->{default}})){
 		$savedStats{$k}=$v;
