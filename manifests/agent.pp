@@ -87,7 +87,7 @@ class hyperic::agent::nginx inherits hyperic::agent {
 
 class hyperic::agent::varnish inherits hyperic::agent {
 
-  package { "libconfig-ini-simple-perl":
+  package { "libconfig-simple-perl":
     ensure  => installed,
   }
 
