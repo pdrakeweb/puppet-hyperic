@@ -105,7 +105,7 @@ class hyperic::agent::varnish inherits hyperic::agent {
     group       => root,
     mode        => 755,
     source      => "puppet:///modules/hyperic/varnishstat.pl",
-    require     => Package["libconfig-simple-perl"],
+    require     => [ Exec["hyperic-agent-install"], Package["libconfig-simple-perl"] ],
   }
 
 }
